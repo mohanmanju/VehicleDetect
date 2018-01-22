@@ -39,12 +39,7 @@ class Network:
         self.model.add(Flatten())
         self.model.add(Dense(256, activation='relu'))
         #self.model.add(Dropout(0.5))
-        self.model.add(Dense(1, activation='linear'))
-
-
-        #self.model.add(Dense(units=300,activation='sigmoid',input_dim=dim))
-        #self.model.add(Dense(units=500,activation='sigmoid'))
-        #self.model.add(Dense(units=10,activation='linear'))
+        self.model.add(Dense(1))
 
 
     def compile_model(self):
@@ -63,12 +58,11 @@ class Network:
 
 
     def read_data(self):
-        #data=[]
         x_train = []
         y_train = []
         fold = ["Far","Middle","Left","Right"]
         for typ in fold:
-            images = glob.glob('OwnCollection/non-vehicles/'+typ+'/*.png')
+            images = glob.glob('../../../test/keras/OwnCollection/non-vehicles/'+typ+'/*.png')
             print(len(images))
             for names in images:
                 image = cv2.imread(names)
@@ -77,7 +71,7 @@ class Network:
                 x_train.append(list(image))
                 y_train.append(0)
         for typ in fold:
-            images = glob.glob('OwnCollection/vehicles/'+typ+'/*.png')
+            images = glob.glob('../../../test/keras/OwnCollection/vehicles/'+typ+'/*.png')
             print(len(images))
             for names in images:
                 image = cv2.imread(names)
