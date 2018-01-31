@@ -26,7 +26,7 @@ class Network:
     def build_model(self):
 
         self.model = Sequential()
-        self.model.add(Conv2D(32, (3, 3), activation='relu', input_shape=(64, 64, 3)))
+        self.model.add(Conv2D(32, (3, 3), activation='relu', input_shape=(64, 64, 1)))
         self.model.add(Conv2D(32, (3, 3), activation='relu'))
         self.model.add(MaxPooling2D(pool_size=(2, 2)))
         #self.model.add(Dropout(0.25))
@@ -51,10 +51,10 @@ class Network:
         #tensorboard = TensorBoard(log_dir="logs/{}".format(time()))
         self.model.fit(self.x_train,self.y_train,epochs=3)#,callbacks=[tensorboard])
         model_json = self.model.to_json()
-        with open("model_new.json", "w") as json_file:
+        with open("model_new_grey.json", "w") as json_file:
             json_file.write(model_json)
 
-        self.model.save_weights('weights_new.h5')
+        self.model.save_weights('weights_new_grey.h5')
 
 
     def read_data(self):
@@ -65,16 +65,18 @@ class Network:
             images = glob.glob('../../../test/keras/OwnCollection/non-vehicles/'+typ+'/*.png')
             print(len(images))
             for names in images:
-                image = cv2.imread(names)
+                image = cv2.imread(names,cv2.IMREAD_GRAYSCALE)
+                #image = cv2.cvtColor( image, cv2.COLOR_BGR2GRAY )
                 #image = cv2.resize(image, (28, 28))
                 image = img_to_array(image)
                 x_train.append(list(image))
                 y_train.append(0)
+        #print(image)
         for typ in fold:
             images = glob.glob('../../../test/keras/OwnCollection/vehicles/'+typ+'/*.png')
             print(len(images))
             for names in images:
-                image = cv2.imread(names)
+                image = cv2.imread(names,cv2.IMREAD_GRAYSCALE)
                 #image = cv2.resize(image, (28, 28))
                 image = img_to_array(image)
                 x_train.append(list(image))
@@ -83,7 +85,7 @@ class Network:
             i = random.randint(0,len(x_train)-1)
             self.x_train.append(x_train.pop(i))
             self.y_train.append(y_train.pop(i))
-        self.x_train = np.asarray(self.x_train)
+        self.x_train = np.array(self.x_train)
         #print(self.x_train)
 
 

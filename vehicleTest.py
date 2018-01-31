@@ -4,11 +4,11 @@ import cv2
 from keras.preprocessing.image import img_to_array
 import time
 
-json_file = open('model.json', 'r')
+json_file = open('model_new_grey.json', 'r')
 loaded_model_json = json_file.read()
 json_file.close()
 model = model_from_json(loaded_model_json)
-model.load_weights("weights.h5")
+model.load_weights("weights_new_grey.h5")
 model.compile(loss='mse',optimizer='adam',metrics=['accuracy'])
 
 
@@ -38,12 +38,13 @@ def section_image():
 while True:
 
     retval, im = camera.read()
-    image = cv2.resize(im, (64, 64))
-    gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+
+    image = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
     # Display the resulting frame
-    cv2.imshow('frame',gray)
+    cv2.imshow('frame',image)
     if cv2.waitKey(1)  == ord('q'):
         break
+    image = cv2.resize(image, (64, 64))
     image = img_to_array(image)
     lst =[]
     lst.append(list(image))
